@@ -95,19 +95,22 @@ $(document).keydown(function(event){
 			createNum();
 			break;
 		case 38://up
+			move2Top();
 			createNum();
 			break;
 		case 39://right
+			move2Right();
 			createNum();
 			break;
 		case 40://down
+			move2Bottom();
 			createNum();
 			break;
 	}
 });
 
 function move2Left(){
-	if (!canMove(board)){
+	if (!canMoveLeft(board)){
 		return false;
 	}else{
 		for(var i = 0;i < 4;i++){
@@ -135,5 +138,91 @@ function move2Left(){
 		
 		//return true;
 	}
-	updateBoardView();
+	setTimeout('updateBoardView()',200);
+}
+
+function move2Right(){
+	if (!canMoveRight(board)){
+		return false;
+	}else{
+		for(var i = 0;i < 4;i++){
+			for(var j = 2;j >= 0; j--){
+				if(board[i][j] != 0){
+					for(var k = 3; k > j;k--){
+						if(board[i][k] == 0 && noBlockHorizontal(i,k,j,board)){
+							move(i,j,i,k);
+							board[i][k] = board[i][j];
+							
+							board[i][j] = 0;
+							continue;
+
+						}else if(board[i][k] == board[i][j] && noBlockHorizontal(i,k,j,board)){
+							move(i,j,i,k);
+							board[i][k] += board[i][j];
+							//console.log('+:'+board[i][k]);
+							board[i][j] = 0;
+							continue;
+						}
+					}
+				}
+			}
+		}
+		
+		//return true;
+	}
+	setTimeout('updateBoardView()',200);
+}
+
+function move2Top(){
+	if(!canMoveTop(board)){
+		return false;
+	}else{
+		for(var i = 0;i < 4;i++){
+			for(var j = 1;j < 4;j++){
+				if(board[j][i] != 0){
+					for(var k = 0;k < j;k++){
+						if(board[k][i] == 0 && noBlockVertical(i,k,j,board)){
+							move(i,j,i,k);
+							board[k][i] = board[j][i];
+							board[j][i] = 0;
+							continue;
+						}else if(board[k][i] == board[j][i] && noBlockVertical(i,k,j,board)){
+							move(i,j,i,k);
+							board[k][i] += board[j][i];
+							board[j][i] = 0;
+							continue;
+						}
+					}
+				}
+			}
+		}
+	}
+	setTimeout('updateBoardView()',200);
+}
+
+function move2Bottom(){
+	if(!canMoveBottom(board)){
+		return false;
+	}else{
+		for(var i = 0;i < 4;i++){
+			for(var j = 3;j >= 0;j--){
+				if(board[j][i] != 0){
+					for(var k = 3;k > j;k--){
+						if(board[k][i] == 0 && noBlockVertical(i,k,j,board)){
+							move(i,j,i,k);
+							board[k][i] = board[j][i];
+							board[j][i] = 0;
+							continue;
+						}else if(board[k][i] == board[j][i] && noBlockVertical(i,k,j,board)){
+							move(i,j,i,k);
+							board[k][i] += board[j][i];
+							board[j][i] = 0;
+							continue;
+						}
+					}
+				}
+			}
+		}
+	}
+	setTimeout('updateBoardView()',200);
 }

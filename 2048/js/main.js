@@ -43,7 +43,7 @@ function updateBoardView(){
 		for(var j = 0; j < 4;j++){
 			//console.log('1');
 			$('#gridBox').append('<div class="number-cell" id="number-cell-'+ i +'-'+j+'"></div>');
-			var thisNumCell = $('number-cell-' + i +'-'+j);
+			var thisNumCell = $('#number-cell-' + i +'-'+j);
 
 			if(board[i][j] == 0){
 				thisNumCell.css('width','0px');
@@ -85,4 +85,55 @@ function createNum(){
 	//显示
 	board[randomX][randomY] = randomNum;
 	showNum(randomX,randomY,randomNum);
+}
+
+//响应键盘操作
+$(document).keydown(function(event){
+	switch(event.keyCode){
+		case 37://left
+			move2Left();
+			createNum();
+			break;
+		case 38://up
+			createNum();
+			break;
+		case 39://right
+			createNum();
+			break;
+		case 40://down
+			createNum();
+			break;
+	}
+});
+
+function move2Left(){
+	if (!canMove(board)){
+		return false;
+	}else{
+		for(var i = 0;i < 4;i++){
+			for(var j = 1;j < 4; j++){
+				if(board[i][j] != 0){
+					for(var k = 0; k < j;k++){
+						if(board[i][k] == 0 && noBlockHorizontal(i,k,j,board)){
+							move(i,j,i,k);
+							board[i][k] = board[i][j];
+							
+							board[i][j] = 0;
+							continue;
+
+						}else if(board[i][k] == board[i][j] && noBlockHorizontal(i,k,j,board)){
+							move(i,j,i,k);
+							board[i][k] += board[i][j];
+							//console.log('+:'+board[i][k]);
+							board[i][j] = 0;
+							continue;
+						}
+					}
+				}
+			}
+		}
+		
+		//return true;
+	}
+	updateBoardView();
 }

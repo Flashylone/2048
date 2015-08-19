@@ -13,3 +13,11 @@ function showNum(randomX,randomY,randomNum){
 		left:getLeft(randomX,randomY)
 	},50);
 }
+
+function move(i,j,tox,toy){
+	var numCell = $('#number-cell-'+i+'-'+j);
+	numCell.animate({
+		top: getTop(tox,toy),
+		left: getLeft(tox,toy)
+	},200);
+}
